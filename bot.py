@@ -7,10 +7,6 @@ from discord.ext import commands
 description = 'Bot para mandar alertas dos boss do servidor South America'
 bot = commands.Bot(command_prefix='!', description=description)
 token = getenv('BOT_TOKEN')
-uri = getenv('MONGODB_URI')
-
-# client = pymongo.MongoClient(uri)
-# db = client.get_default_database()
 
 @bot.event
 async def on_ready():
@@ -31,5 +27,20 @@ async def peixinho():
 	'''glub! '''
 	await bot.say('_glub glub_')
 
+@bot.command(pass_context=False)
+async def notifyme():
+	'''Adiciona seu nome na lista de avisos'''
+	author = ctx.message.author.name
+	role = get(message.server.roles, name='Boss Timer')
+	await client.add_roles(author, role)
+	await bot.say('_glub glub_')
+
+@bot.command(pass_context=False)
+async def removeme():
+	'''Adiciona seu nome na lista de avisos'''
+	author = ctx.message.author.name
+	role = get(message.server.roles, name='Boss Timer')
+	await client.remove_roles(author, role)
+	await bot.say('_glub glub_')
 
 bot.run(token)
