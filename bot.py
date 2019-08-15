@@ -7,7 +7,7 @@ description = 'Bot para mandar alertas dos boss do servidor South America'
 bot = commands.Bot(command_prefix='.', description=description)
 token = getenv('BOT_TOKEN')
 
-bt_role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
+bt_role = discord.utils.get(guild.roles, name='Boss Timer')
 
 @bot.event
 async def on_ready():
