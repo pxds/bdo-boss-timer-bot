@@ -17,22 +17,22 @@ async def on_ready():
 @bot.command()
 async def peixinho(ctx):
 	'''glub! '''
-	await bot.send('_glub glub_')
+	await ctx.send('_glub glub_')
 
 @bot.command()
 async def notifyme(ctx):
 	'''Adiciona seu nome na lista de avisos'''
-	author = ctx.message.author.name
-	role = get(message.guild.roles, name='Boss Timer')
+	author = ctx.author
+	role = get(ctx.guild, name='Boss Timer')
 	await member.add_roles(author, role)
-	await bot.send('_glub glub_')
+	await ctx.send('_glub glub_')
 
 @bot.command()
 async def removeme(ctx):
 	'''Adiciona seu nome na lista de avisos'''
-	author = ctx.message.author.name
-	role = get(message.guild.roles, name='Boss Timer')
+	author = ctx.author
+	role = get(ctx.guild, name='Boss Timer')
 	await member.remove_roles(author, role)
-	await bot.send('_glub glub_')
+	await ctx.send('_glub glub_')
 
 bot.run(token)
