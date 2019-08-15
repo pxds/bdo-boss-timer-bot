@@ -1,6 +1,5 @@
 import datetime
 import discord
-import pymongo
 from os import getenv
 from discord.ext import commands
 
