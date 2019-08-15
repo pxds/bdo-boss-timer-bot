@@ -22,7 +22,7 @@ async def peixinho(ctx):
 @bot.command()
 async def whoisme(ctx):
 	'''glub! '''
-	await ctx.send('you are ' + ctx.message.author)
+	await ctx.send("""you are {}""".format(ctx.message.author))
 
 # @bot.command()
 # async def notifyme(ctx):
