@@ -5,7 +5,6 @@ from discord.ext import commands
 
 description = 'Bot para mandar alertas dos boss do servidor South America'
 bot = commands.Bot(command_prefix='.', description=description)
-client = discord.Client()
 token = getenv('BOT_TOKEN')
 
 # bt_role = discord.utils.get(client.get_guild().roles, name='Boss Timer')
@@ -16,7 +15,7 @@ async def on_ready():
     print('Bot name: ', bot.user.name)
     print('---------------')
     print('This bot is ready for action!')
-    for guild in client.guilds:
+    for guild in bot.guilds:
     	print(guild)
     	pass
 
