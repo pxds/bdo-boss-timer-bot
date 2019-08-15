@@ -7,6 +7,8 @@ description = 'Bot para mandar alertas dos boss do servidor South America'
 bot = commands.Bot(command_prefix='.', description=description)
 token = getenv('BOT_TOKEN')
 
+bt_role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
+
 @bot.event
 async def on_ready():
     print('Bot ID: ', bot.user.id)
@@ -22,17 +24,22 @@ async def peixinho(ctx):
 @bot.command()
 async def notifyme(ctx):
 	'''Adiciona seu nome na lista de avisos'''
-	role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
 	user = ctx.message.author
-	await user.add_roles(role)
+	await user.add_roles(bt_role)
 	await ctx.send('Você será notificado na hora de um boss :)')
 
 @bot.command()
 async def removeme(ctx):
 	'''Remove seu nome da lista de avisos'''
-	role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
 	user = ctx.message.author
-	await user.remove_roles(role)
+	await user.remove_roles(bt_role)
 	await ctx.send('Você **não será mais** notificado na hora de um boss :)')
+
+boss_about2_spawn == True
+
+if boss_about2_spawn:
+	await channel.send(bt_role.mention + " alooo")
+	boss_about2_spawn = False
+	pass
 
 bot.run(token)
