@@ -20,23 +20,19 @@ async def peixinho(ctx):
 	await ctx.send('_glub glub_')
 
 @bot.command()
-async def whoisme(ctx):
-	'''glub! '''
-	await ctx.send("""you are {}""".format(ctx.message.author))
+async def notifyme(ctx):
+	'''Adiciona seu nome na lista de avisos'''
+	role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
+	user = ctx.message.author
+	await user.add_roles(role)
+	await ctx.send('Você será notificado na hora de um boss :)')
 
-# @bot.command()
-# async def notifyme(ctx):
-# 	'''Adiciona seu nome na lista de avisos'''
-# 	author = ctx.author
-# 	await member.add_roles(author, role)
-# 	await ctx.send('_glub glub_')
-
-# @bot.command()
-# async def removeme(ctx):
-# 	'''Adiciona seu nome na lista de avisos'''
-# 	author = ctx.author
-# 	role = get(ctx.guild, name='Boss Timer')
-# 	await member.remove_roles(author, role)
-# 	await ctx.send('_glub glub_')
+@bot.command()
+async def removeme(ctx):
+	'''Remove seu nome da lista de avisos'''
+	role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
+	user = ctx.message.author
+	await user.remove_roles(role)
+	await ctx.send('Você **não será mais** notificado na hora de um boss :)')
 
 bot.run(token)
