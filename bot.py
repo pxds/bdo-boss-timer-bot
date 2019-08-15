@@ -10,7 +10,7 @@ token = getenv('BOT_TOKEN')
 
 # bt_role = discord.utils.get(client.get_guild().roles, name='Boss Timer')
 
-@client.event
+@bot.event
 async def on_ready():
     print('Bot ID: ', bot.user.id)
     print('Bot name: ', bot.user.name)
