@@ -20,19 +20,23 @@ async def peixinho(ctx):
 	await ctx.send('_glub glub_')
 
 @bot.command()
-async def notifyme(ctx):
-	'''Adiciona seu nome na lista de avisos'''
-	author = ctx.author
-	role = get(ctx.guild, name='Boss Timer')
-	await member.add_roles(author, role)
-	await ctx.send('_glub glub_')
+async def whoisme(ctx):
+	'''glub! '''
+	await ctx.send('you are ' + ctx.message.author)
 
-@bot.command()
-async def removeme(ctx):
-	'''Adiciona seu nome na lista de avisos'''
-	author = ctx.author
-	role = get(ctx.guild, name='Boss Timer')
-	await member.remove_roles(author, role)
-	await ctx.send('_glub glub_')
+# @bot.command()
+# async def notifyme(ctx):
+# 	'''Adiciona seu nome na lista de avisos'''
+# 	author = ctx.author
+# 	await member.add_roles(author, role)
+# 	await ctx.send('_glub glub_')
+
+# @bot.command()
+# async def removeme(ctx):
+# 	'''Adiciona seu nome na lista de avisos'''
+# 	author = ctx.author
+# 	role = get(ctx.guild, name='Boss Timer')
+# 	await member.remove_roles(author, role)
+# 	await ctx.send('_glub glub_')
 
 bot.run(token)
