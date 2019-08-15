@@ -15,31 +15,24 @@ async def on_ready():
     print('This bot is ready for action!')
 
 @bot.command()
-async def ping(ctx):
-    '''Returns pong when called'''
-    author = ctx.message.author.name
-    server = ctx.message.server.name
-    await bot.send('Pong for {} from {}!'.format(author, server))
-
-@bot.command()
-async def peixinho():
+async def peixinho(ctx):
 	'''glub! '''
 	await bot.send('_glub glub_')
 
 @bot.command()
-async def notifyme():
+async def notifyme(ctx):
 	'''Adiciona seu nome na lista de avisos'''
 	author = ctx.message.author.name
-	role = get(message.server.roles, name='Boss Timer')
-	await client.add_roles(author, role)
+	role = get(message.guild.roles, name='Boss Timer')
+	await member.add_roles(author, role)
 	await bot.send('_glub glub_')
 
 @bot.command()
-async def removeme():
+async def removeme(ctx):
 	'''Adiciona seu nome na lista de avisos'''
 	author = ctx.message.author.name
-	role = get(message.server.roles, name='Boss Timer')
-	await client.remove_roles(author, role)
+	role = get(message.guild.roles, name='Boss Timer')
+	await member.remove_roles(author, role)
 	await bot.send('_glub glub_')
 
 bot.run(token)
