@@ -38,7 +38,7 @@ async def removeme(ctx):
 boss_about2_spawn == True
 
 if boss_about2_spawn:
-	await channel.send(bt_role.mention + " alooo")
+	channel.send(bt_role.mention + " alooo")
 	boss_about2_spawn = False
 	pass
 
