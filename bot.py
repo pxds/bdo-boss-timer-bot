@@ -5,6 +5,7 @@ from discord.ext import commands
 
 description = 'Bot para mandar alertas dos boss do servidor South America'
 bot = commands.Bot(command_prefix='.', description=description)
+client = discord.Client()
 token = getenv('BOT_TOKEN')
 
 bt_role = discord.utils.get(client.get_guild().roles, name='Boss Timer')
