@@ -41,11 +41,4 @@ async def removeme(ctx):
 	await user.remove_roles()
 	await ctx.send('Você **não será mais** notificado na hora de um boss :)')
 
-boss_about2_spawn == True
-
-if boss_about2_spawn:
-	channel.send("one shot one kill")
-	boss_about2_spawn = False
-	pass
-
 bot.run(token)
