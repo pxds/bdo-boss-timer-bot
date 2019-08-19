@@ -4,6 +4,8 @@ import discord
 from discord.ext import commands
 from os import getenv
 
+boss_schedule = {}
+
 description = 'Bot para mandar alertas dos boss do servidor South America'
 bot = commands.Bot(command_prefix='.', description=description)
 token = getenv('BOT_TOKEN')
@@ -37,15 +39,34 @@ async def removeme(ctx):
 	user = ctx.message.author
 	role = discord.utils.get(ctx.guild.roles.roles, name='Boss Timer')
 	await user.remove_roles()
-	await ctx.send('Você **não será mais** notificado na hora de um boss :)')
+	await ctx.send('Você **não será mais** notificado na hora de um boss :(')
+
+@bot.command()
+async def setchannel(ctx):
+	'''Define qual o canal que o bot irá enviar as mensagens'''
+	channel = ctx.message.channel
+	bot.bg_task = bot.loop.create_task(background_task(channel))
+	await ctx.send('Vou realizar minhas notificações no canal {0.mention}'.format(channel))
+
+@bot.command()
+async def stoppls(ctx):
+	'''Para de enviar mensagens'''
+	if bot.bg_task:
+		bot.bg_task.cancel()
+		try:
+			await bot.bg_task
+		except asyncio.CancelledError:
+			print('Task was sucessfully canceled')
+		finally:
+			pass
+	await ctx.send('Ta bom, eu paro...')
 
 @bot.event
-async def background_task():
+async def background_task(channel):
 	await bot.wait_until_ready()
 	while not bot.is_closed():
-		print('1 minute counter')
-		await asyncio.sleep(60) # task runs every 60 seconds
+		await channel.send(datetime.datetime.now())
 
-bot.bg_task = bot.loop.create_task(background_task())
+		await asyncio.sleep(10) # task runs every 10 seconds
 
 bot.run(token)
