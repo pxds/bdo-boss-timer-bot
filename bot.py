@@ -5,11 +5,11 @@ import discord
 from discord.ext import commands
 from os import getenv
 
-async def print_boss_message(boss_name,boss_time,channel):
+async def print_boss_message(boss_name,role,channel,delta):
 	if len(boss_name) == 1:
-		await channel.send('{boss[0]} vai nascer em 5min'.format(boss=boss_name))
+		await channel.send('{role.mention} - {boss[0].mention} vai nascer em {delta}min'.format(role=role,boss=boss_name,delta=delta))
 	elif len(boss_name) == 2:
-		await channel.send('{boss[0]} e {boss[1]} vão nascer em 5min'.format(boss=boss_name))
+		await channel.send('{role.mention} - {boss[0].mention} e {boss[1].mention} vão nascer em {delta}min'.format(role=role,boss=boss_name,delta=delta))
 
 async def print_next_boss_message(boss_name,boss_time,channel):
 	if len(boss_name) == 1:
@@ -60,7 +60,8 @@ async def setchannel(ctx):
 	'''Define qual o canal que o bot irá enviar as mensagens'''
 	channel = ctx.message.channel
 	guild = ctx.message.guild
-	bot.bg_task = bot.loop.create_task(background_task(channel,guild))
+	role = discord.utils.get(ctx.guild.roles, name='Boss Timer')
+	bot.bg_task = bot.loop.create_task(background_task(channel,guild,role))
 	await ctx.send('Vou realizar minhas notificações no canal {0.mention}'.format(channel))
 
 @bot.command()
@@ -76,29 +77,55 @@ async def stoppls(ctx):
 			pass
 	await ctx.send('Ta bom, eu paro...')
 
+@bot.command()
+async def nextboss(ctx):
+	'''Fala qual o próximo boss'''
+	channel = ctx.message.channel
+	guild = ctx.message.guild
+
+	current_time = datetime.datetime.now()
+	current_hour = datetime.datetime.strftime(current_time,"%H:%M")
+	current_day = datetime.datetime.strftime(current_time,"%a")
+	next_day = datetime.datetime.strftime(current_time+datetime.timedelta(days=1),"%a")
+
+	for hour in boss_schedule.keys():
+		if current_hour < hour:
+			next_boss_spawn = boss_schedule[hour][current_day]
+			break
+		# if there is no boss to spawn on the current day
+		# then it should be the first boss of the next day
+		next_boss_spawn = boss_schedule['02:00'][next_day]
+
+	boss_names = []
+	for boss in next_boss_spawn:
+		boss_names.append((discord.utils.get(guild.roles, name=boss)))
+
+	await print_next_boss_message(boss_names,hour,channel)
+
 @bot.event
-async def background_task(channel,guild):
+async def background_task(channel,guild,role):
 	await bot.wait_until_ready()
 	while not bot.is_closed():
 		current_time = datetime.datetime.now()
 		current_hour = datetime.datetime.strftime(current_time,"%H:%M")
+		current_hour_p5 = datetime.datetime.strftime(current_time+datetime.timedelta(minutes=5),"%H:%M")
 		current_day = datetime.datetime.strftime(current_time,"%a")
-		next_day = datetime.datetime.strftime(current_time+datetime.timedelta(days=1),"%a")
 
+		next_boss_spawn = []
 		for hour in boss_schedule.keys():
-			if current_hour < hour:
+			if current_hour < hour <= current_hour_p5:
+				delta = datetime.datetime.strptime(hour,"%H:%M")-datetime.datetime.strptime(current_hour,"%H:%M")
 				next_boss_spawn = boss_schedule[hour][current_day]
-				break
-			# if there is no boss to spawn on the current day
-			# then it should be the first boss of the next day
-			next_boss_spawn = boss_schedule['02:00'][next_day]
+				break		
+		
+		if next_boss_spawn:
+			boss_names = []
 
-		boss_names = []
-		for boss in next_boss_spawn:
-			boss_names.append((discord.utils.get(guild.roles, name=boss)))
+			for boss in next_boss_spawn:
+				boss_names.append((discord.utils.get(guild.roles, name=boss)))
 
-		await print_next_boss_message(boss_names,hour,channel)
+			await print_boss_message(boss_names,role,channel,int(delta.seconds/60))
 
-		await asyncio.sleep(60) # task runs every minute
+		await asyncio.sleep(60) # task runs every 60 seconds
 
 bot.run(token)
