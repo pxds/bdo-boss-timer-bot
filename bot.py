@@ -105,11 +105,14 @@ async def nextboss(ctx):
 @bot.event
 async def background_task(channel,guild,role):
 	await bot.wait_until_ready()
+	print('Bot is ready')
 	while not bot.is_closed():
 		current_time = datetime.datetime.now()
 		current_hour = datetime.datetime.strftime(current_time,"%H:%M")
 		current_hour_p5 = datetime.datetime.strftime(current_time+datetime.timedelta(minutes=5),"%H:%M")
 		current_day = datetime.datetime.strftime(current_time,"%a")
+
+		print('Current time: {current_time} | Current+5: {current_hour_p5}'.format(current_time=current_hour,current_hour_p5=current_hour_p5))
 
 		next_boss_spawn = []
 		for hour in boss_schedule.keys():
@@ -118,10 +121,13 @@ async def background_task(channel,guild,role):
 				next_boss_spawn = boss_schedule[hour][current_day]
 				break		
 		
+		print('Next boss found is...')
+
 		if next_boss_spawn:
 			boss_names = []
 
 			for boss in next_boss_spawn:
+				print(boss)
 				boss_names.append((discord.utils.get(guild.roles, name=boss)))
 
 			await print_boss_message(boss_names,role,channel,int(delta.seconds/60))
